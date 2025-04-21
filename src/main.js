@@ -6,7 +6,6 @@ import router from './router'
 
 import './assets/main.css'
 
-console.log(gaga)
 const app = createApp(App)
 
 app.use(createPinia())
