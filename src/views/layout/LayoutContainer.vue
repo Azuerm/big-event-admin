@@ -12,10 +12,30 @@ import {
 import avatar from '@/assets/default.png'
 import { useUserStore } from '@/stores'
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 const userStore = useUserStore()
 onMounted(() => {
   userStore.getUser()
 })
+const router = useRouter()
+const handleCommand = async (key) => {
+  // key或者command
+  if (key === 'logout') {
+    // 退出操作
+    await ElMessageBox.confirm('你确认要进行退出吗', '温馨提示', {
+      type: 'warning',
+      confirmButtonText: '确认',
+      cancelButtonText: '取消'
+    })
+    // 清除本地的数据 (token+user信息)
+    userStore.removeToken()
+    userStore.setUser({})
+    router.push('/login')
+  } else {
+    // 跳转操作
+    router.push(`/user/${key}`)
+  }
+}
 </script>
 
 <template>
@@ -74,16 +94,20 @@ onMounted(() => {
             userStore.user.nickname || userStore.user.username
           }}</strong>
         </div>
-        <el-dropdown placement="bottom-end">
+        <!-- 退出登录 -->
+        <el-dropdown placement="bottom-end" @command="handleCommand">
+          <!-- 展示给用户，默认看到的 -->
           <span class="el-dropdown__box">
             <el-avatar :src="userStore.user.user_pic || avatar" />
             <el-icon><CaretBottom /></el-icon>
           </span>
+          <!-- 折叠的下拉部分 -->
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="profile" :icon="User"
                 >基本资料</el-dropdown-item
               >
+              <!-- cmmand="路由的名字" -->
               <el-dropdown-item command="avatar" :icon="Crop"
                 >更换头像</el-dropdown-item
               >

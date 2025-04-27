@@ -3,7 +3,7 @@ import {
   createWebHistory
   // createWebHashHistory
 } from 'vue-router'
-import { useUserStore} from '@/stores'
+import { useUserStore } from '@/stores'
 // createRouter 创建路由实例
 // 配置history模式
 // 1.history模式：createWebHistory 地址栏不带#
@@ -51,7 +51,7 @@ const router = createRouter({
 // 1. undefined / true 直接放行
 // 2. false 拦截from的地址页面
 // 3. 具体路径 或 路径对象 拦截到对应的地址 '/login' { name: 'login'}
-router.beforeEach( (to) => {
+router.beforeEach((to) => {
   // 如果没有token，且访问的是非登录页，拦截到登录，其他情况正常放行
   const userStore = useUserStore()
   if (!userStore.token && to.path !== '/login') return '/login'
