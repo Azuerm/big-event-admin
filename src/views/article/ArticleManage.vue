@@ -65,6 +65,19 @@ const onEditArticle = (row) => {
 const oneDeletetArticle = (row) => {
   console.log(row)
 }
+// 添加或者编辑 成功的回调
+const onSuccess = (type) => {
+  if (type == 'add') {
+    // 如果是添加，最好渲染最后一页
+    const lastPage = Math.ceil((total.value + 1) / params.value.pagesize)
+    // 更新成最大页码数，在渲染
+    params.value.pagenum = lastPage
+    getArticleList()
+  } else {
+    // 如果是编辑，直接渲染当前页面即可
+    getArticleList()
+  }
+}
 </script>
 
 <template>
@@ -142,6 +155,7 @@ const oneDeletetArticle = (row) => {
 
     <!-- 抽屉 -->
     <ArticleEdit
+      @success="onSuccess"
       ref="articleEditRef"
       v-model:cid="params.cate_id"
     ></ArticleEdit>

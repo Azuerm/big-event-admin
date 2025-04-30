@@ -19,3 +19,6 @@ export const artDelChannelService = (id) => {
 export const artGetListService = (params) => {
   return request.get('/my/article/list', { params })
 }
+// 文章：添加文章
+// 注意：data需要是一个formDate格式的对象
+export const artPublishService = (data) => request.post('/my/article/add', data)

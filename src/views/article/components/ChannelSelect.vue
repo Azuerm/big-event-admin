@@ -13,7 +13,16 @@ getChannelList()
 //     type: [Number, String]
 //   }
 // })
-const cid = defineModel('cid')
+const cid = defineModel('cid', {
+  default: '',
+  set(value) {
+    // 自动转换数字字符串为数字类型（可选）
+    if (typeof value === 'string' && !isNaN(value)) {
+      return Number(value)
+    }
+    return value
+  }
+})
 </script>
 
 <template>
