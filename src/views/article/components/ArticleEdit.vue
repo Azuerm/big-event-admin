@@ -5,8 +5,14 @@ import { Plus } from '@element-plus/icons-vue'
 // vue-quill富文本编辑器
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { artPublishService } from '@/api/article'
+import {
+  artPublishService,
+  artGetDetailService,
+  artEditService
+} from '@/api/article'
 import { defineEmits } from 'vue'
+import { baseURL } from '@/utils/request.js'
+import axios from 'axios'
 // 默认数据
 const defaultForm = {
   title: '',
@@ -50,7 +56,11 @@ const onPublish = async (state) => {
   // 发请求
   if (formModel.value.id) {
     // 编辑操作
-    console.log('编辑操作')
+    // console.log('编辑操作')
+    await artEditService(fd)
+    ElMessage.success('修改成功')
+    visibleDrawer.value = false
+    emit('success', 'edit')
   } else {
     // 发布操作
     await artPublishService(fd)
@@ -61,12 +71,21 @@ const onPublish = async (state) => {
   }
 }
 const editorRef = ref() // 编辑器
-const openDrawer = (row) => {
+const openDrawer = async (row) => {
   visibleDrawer.value = true //显示抽屉
   // console.log(row)
   if (row.id) {
     // 需要基于 row.id发送请求，获取编辑对应的详情数据，进行回显
     // console.log('编辑回显')
+    const res = await artGetDetailService(row.id)
+    // console.log(res.data)
+    formModel.value = res.data.data
+    // 图片需要单独处理
+    imgUrl.value = baseURL + formModel.value.cover_img
+    // 注意：提交给后台，需要的数据格式，是file对象格式
+    // 需要将网络图片地址 => 转换为file对象，存储起来,将来便于提交
+    const file = await imageUrlToFile(imgUrl.value, formModel.value.cover_img)
+    formModel.value.cover_img = file
   } else {
     // console.log('添加')
     formModel.value = { ...defaultForm } //基于默认的数据，重置from的数据
@@ -80,6 +99,28 @@ const openDrawer = (row) => {
 defineExpose({
   openDrawer
 })
+
+// 将网络图片地址转换为File对象
+async function imageUrlToFile(url, fileName) {
+  try {
+    // 第一步：使用axios获取网络图片数据
+    const response = await axios.get(url, { responseType: 'arraybuffer' })
+    const imageData = response.data
+
+    // 第二步：将图片数据转换为Blob对象
+    const blob = new Blob([imageData], {
+      type: response.headers['content-type']
+    })
+
+    // 第三步：创建一个新的File对象
+    const file = new File([blob], fileName, { type: blob.type })
+
+    return file
+  } catch (error) {
+    console.error('将图片转换为File对象时发生错误:', error)
+    throw error
+  }
+}
 </script>
 
 <template>

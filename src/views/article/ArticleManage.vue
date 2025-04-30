@@ -2,7 +2,7 @@
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import ChannelSelect from './components/ChannelSelect.vue'
-import { artGetListService } from '@/api/article.js'
+import { artGetListService, artDelService } from '@/api/article.js'
 import { formatTime } from '@/utils/format.js'
 import ArticleEdit from './components/ArticleEdit.vue'
 const articleList = ref([]) // 文章列表
@@ -62,8 +62,10 @@ const onEditArticle = (row) => {
   articleEditRef.value.openDrawer(row)
 }
 // 删除逻辑
-const oneDeletetArticle = (row) => {
-  console.log(row)
+const oneDeletetArticle = async (row) => {
+  // console.log(row)
+  await artDelService(row.id)
+  getArticleList()
 }
 // 添加或者编辑 成功的回调
 const onSuccess = (type) => {

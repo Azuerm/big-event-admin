@@ -11,3 +11,7 @@ export const userLoginService = ({ username, password }) => {
 export const userGetInfoService = () => {
   return request.get('/my/userinfo')
 }
+// 更新用户基本信息
+export const userUpdateInfoService = ({ id, nickname, email }) => {
+  return request.put('/my/userinfo', { id, nickname, email })
+}

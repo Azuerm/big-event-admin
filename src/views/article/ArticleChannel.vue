@@ -18,6 +18,12 @@ const getChannelList = async () => {
 }
 getChannelList()
 const onDelChannel = async (row) => {
+  // await ElMessageBox.confirm('你确认要删除该分类吗', '温馨提示', {
+  //   type: 'warning',
+  //   confirmButtonText: '确认',
+  //   cancelButtonText: '取消'
+  // })
+  // 提示用户是否要删除
   await ElMessageBox.confirm('你确认要删除该分类吗', '温馨提示', {
     type: 'warning',
     confirmButtonText: '确认',
