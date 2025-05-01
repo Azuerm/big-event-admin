@@ -15,3 +15,11 @@ export const userGetInfoService = () => {
 export const userUpdateInfoService = ({ id, nickname, email }) => {
   return request.put('/my/userinfo', { id, nickname, email })
 }
+// 更新用户头像
+export const userUpdateAvatarService = (avatar) => {
+  return request.patch('/my/update/avatar', { avatar })
+}
+// 更新用户密码
+export const userUpdatePasswordService = (data) => {
+  return request.patch('/my/updatepwd', { ...data })
+}

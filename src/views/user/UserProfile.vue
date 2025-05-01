@@ -55,7 +55,7 @@ const submitForm = async () => {
 }
 </script>
 <template>
-  <PageContainer :title="基本资料">
+  <page-container title="基本资料">
     <!-- 表单部分 -->
     <el-form
       ref="formRef"
@@ -81,7 +81,7 @@ const submitForm = async () => {
         <el-button type="primary" @click="submitForm">提交修改</el-button>
       </el-form-item>
     </el-form>
-  </PageContainer>
+  </page-container>
 </template>
 <style scoped>
 /* 可选样式 */
